@@ -65,7 +65,8 @@ export default function SignupPage() {
       setError(error.message)
       setLoading(false)
     } else if (data.user) {
-      await supabaseAuth.from('profiles').insert({ id: data.user.id, role, is_verified: false }).upsert({ id: data.user.id })
+      // Fixed: Use standard upsert to safely insert or update the profile
+      await supabaseAuth.from('profiles').upsert({ id: data.user.id, role, is_verified: false })
       handleRoute()
     }
   }
