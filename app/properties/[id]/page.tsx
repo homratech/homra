@@ -3,11 +3,12 @@ import Sidebar from '@/components/Sidebar'
 import Link from 'next/link'
 import { ChevronLeft, Star, ShieldCheck, Lock, MessageSquare, FileCheck, Bot, ChevronRight } from 'lucide-react'
 
-export default async function PropertyDetail({ params }: { params: { id: string } }) {
+export default async function PropertyDetail({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const { data: property } = await supabase
     .from('properties')
     .select('*')
-    .eq('id', params.id)
+    .eq('id', id)
     .single()
 
   if (!property) {
