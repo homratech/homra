@@ -324,7 +324,7 @@ export default function HomePage() {
           <div className="flex-1 flex items-center"></div>
           
           <nav className="flex-1 flex justify-center items-center gap-6 text-xs font-medium whitespace-nowrap">
-            {tabs.map((tab) => (
+            {tabs.map(tab => (
               <span 
                 key={tab} 
                 onClick={() => setActiveTab(tab)}
@@ -332,7 +332,7 @@ export default function HomePage() {
               >
                 {tab}
               </span>
-            )}
+            ))}
           </nav>
 
           {/* Right Actions (Slightly nudged up for optical alignment) */}
