@@ -280,7 +280,7 @@ export default function HomePage() {
     <>
       <Sidebar />
       <div className="ml-[200px] px-6 py-4 animate-fade-in-up">
-        {/* TOP NAVIGATION BAR - 3 COLUMN FLEX FOR PERFECT CENTER & ALIGNMENT */}
+        {/* TOP NAVIGATION BAR - PERFECTLY ALIGNED */}
         <header className="flex items-center justify-between h-14 mb-4">
           {/* Left Spacer (1/3 width) */}
           <div className="flex-1 flex items-center"></div>
@@ -291,7 +291,7 @@ export default function HomePage() {
               <span 
                 key={tab} 
                 onClick={() => setActiveTab(tab)}
-                className={`cursor-pointer transition-all duration-200 pb-1 border-b-2 ${activeTab === tab ? 'text-[#1A73E8] border-[#1A73E8]' : 'text-[#5F6368] hover:text-[#1A1A1A] border-transparent'}`}
+                className={`h-8 flex items-center cursor-pointer transition-all duration-200 border-b-2 ${activeTab === tab ? 'text-[#1A73E8] border-[#1A73E8]' : 'text-[#5F6368] hover:text-[#1A1A1A] border-transparent'}`}
               >
                 {tab}
               </span>
@@ -300,7 +300,7 @@ export default function HomePage() {
 
           {/* Right Actions (1/3 width) */}
           <div className="flex-1 flex justify-end items-center gap-3 whitespace-nowrap">
-            <button onClick={() => setShowAuthModal(true)} className="text-xs font-medium text-[#1A1A1A] hover:underline cursor-pointer hidden md:inline">
+            <button onClick={() => setShowAuthModal(true)} className="h-8 flex items-center text-xs font-medium text-[#1A1A1A] hover:underline cursor-pointer hidden md:inline">
               List your property
             </button>
             <button className="w-8 h-8 rounded-full hover:bg-[#F1F3F4] flex items-center justify-center transition-colors">
