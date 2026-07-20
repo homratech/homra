@@ -299,7 +299,7 @@ export default function HomePage() {
           </nav>
 
           {/* Right Actions (1/3 width) */}
-          <div className="flex-1 flex justify-end items-center gap-3 whitespace-nowrap">
+          <div className="flex-1 flex justify-end items-center gap-3 whitespace-nowrap -mt-0.5">
             <button onClick={() => setShowAuthModal(true)} className="h-8 flex items-center text-xs font-medium text-[#1A1A1A] hover:underline cursor-pointer hidden md:inline">
               List your property
             </button>
