@@ -295,7 +295,7 @@ export default function HomePage() {
           </nav>
 
           <div className="justify-self-end flex items-center gap-3">
-            <Link href="/auth/signup" className="text-xs font-medium text-[#1A1A1A] hover:underline cursor-pointer hidden md:inline">
+            <Link href="/auth" className="text-xs font-medium text-[#1A1A1A] hover:underline cursor-pointer hidden md:inline">
               List your property
             </Link>
             <button className="w-8 h-8 rounded-full hover:bg-[#F1F3F4] flex items-center justify-center transition-colors">
