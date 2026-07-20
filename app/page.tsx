@@ -385,19 +385,19 @@ export default function HomePage() {
                 { id: 'bedrooms', icon: BedDouble, label: 'Bedrooms', value: bedroomsText }
               ].map((sec, idx, arr) => (
                 <div key={sec.id} className="flex flex-1 items-center min-w-0">
-                  {/* Solid Homra Blue active state with White Text */}
-                  <button onClick={() => handleSectionClick(sec.id)} className={`flex-1 flex items-center gap-3 px-4 py-2 rounded-full cursor-pointer min-w-0 transition-all duration-200 ${activeSearchSection === sec.id ? 'bg-[#1A73E8] shadow-sm' : 'hover:bg-gray-100 border border-transparent'}`}>
-                    <sec.icon size={16} className={`shrink-0 ${activeSearchSection === sec.id ? 'text-white' : 'text-gray-800'}`} strokeWidth={1.5} />
+                  {/* Fixed layout shift & removed focus outline for smooth transition */}
+                  <button onClick={() => handleSectionClick(sec.id)} className={`flex-1 flex items-center gap-3 px-4 py-2 rounded-full cursor-pointer min-w-0 border border-transparent transition-colors duration-300 focus:outline-none ${activeSearchSection === sec.id ? 'bg-[#1A73E8] shadow-sm' : 'hover:bg-gray-100'}`}>
+                    <sec.icon size={16} className={`shrink-0 transition-colors duration-300 ${activeSearchSection === sec.id ? 'text-white' : 'text-gray-800'}`} strokeWidth={1.5} />
                     <div className="flex flex-col items-start min-w-0">
-                      <span className={`text-xs font-bold leading-tight ${activeSearchSection === sec.id ? 'text-white' : 'text-gray-800'}`}>{sec.label}</span>
-                      <span className={`text-xs leading-tight truncate w-full text-left ${activeSearchSection === sec.id ? 'text-blue-100' : 'text-gray-500'}`}>{sec.value}</span>
+                      <span className={`text-xs font-bold leading-tight transition-colors duration-300 ${activeSearchSection === sec.id ? 'text-white' : 'text-gray-800'}`}>{sec.label}</span>
+                      <span className={`text-xs leading-tight truncate w-full text-left transition-colors duration-300 ${activeSearchSection === sec.id ? 'text-blue-100' : 'text-gray-500'}`}>{sec.value}</span>
                     </div>
                   </button>
                   {idx < arr.length - 1 && <div className="h-8 w-px bg-gray-200 shrink-0 mx-1"></div>}
                 </div>
               ))}
 
-              <button onClick={() => setActiveSearchSection(null)} className="w-12 h-12 bg-[#1A73E8] rounded-full flex items-center justify-center hover:bg-blue-700 hover:scale-105 shrink-0 ml-2 transition-all shadow-md">
+              <button onClick={() => setActiveSearchSection(null)} className="w-12 h-12 bg-[#1A73E8] rounded-full flex items-center justify-center hover:bg-blue-700 hover:scale-105 shrink-0 ml-2 transition-all shadow-md focus:outline-none">
                 <Search size={18} className="text-white" strokeWidth={2.5} />
               </button>
             </div>
