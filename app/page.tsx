@@ -220,7 +220,7 @@ export default function HomePage() {
 
   // Search Bar Bedroom Filter Logic
   const currentBhk = activeFilters.find(f => ['1BHK', '2BHK', '3BHK+'].includes(f))
-  const bedroomsText = currentBhk ? currentBhk : "1+ BHK"
+  const bedroomsText = currentBhk ? currentBhk : "Any"
 
   const handleSearchBedroom = (bhk: string) => {
     const withoutBhk = activeFilters.filter(f => !['1BHK', '2BHK', '3BHK+'].includes(f))
@@ -337,7 +337,7 @@ export default function HomePage() {
         </header>
 
         {/* HERO SECTION */}
-        <section className="relative h-[220px] mb-12">
+        <section className="relative h-[220px] mb-16">
           <div className="absolute inset-0 overflow-hidden rounded-2xl">
             <img 
               src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=1600&auto=format&fit=crop" 
@@ -358,97 +358,86 @@ export default function HomePage() {
             </span>
           </div>
 
-          {/* FLOATING INTERACTIVE SEARCH BAR */}
-          <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 w-full max-w-3xl z-20">
-            <div className="bg-white flex items-center pl-4 pr-1 h-12 rounded-full border border-[#E8EAED]" style={{ boxShadow: '0 6px 20px rgba(0,0,0,0.1)' }}>
+          {/* PREMIUM FLOATING SEARCH BAR */}
+          <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-3xl z-30">
+            <div className="bg-white flex items-center pl-4 pr-1.5 h-14 rounded-full border border-gray-200 shadow-lg transition-all hover:shadow-xl">
               
-              {/* Where Section */}
-              <button onClick={() => setActiveSearchSection(activeSearchSection === 'where' ? null : 'where')} className={`flex-1 flex items-center gap-2 px-2 py-1 rounded-full cursor-pointer min-w-0 transition-all duration-200 ${activeSearchSection === 'where' ? 'bg-white shadow-md border border-[#E8EAED]' : 'hover:bg-gray-50 border border-transparent'}`}>
-                <MapPin size={14} className="text-[#1A73E8] shrink-0" strokeWidth={1.5} />
-                <div className="min-w-0 text-left">
-                  <p className="text-[10px] font-semibold text-[#1A1A1A] leading-none">Where</p>
-                  <p className="text-[10px] text-[#9AA0A6] leading-none truncate mt-0.5">{searchLocation || "Search destinations"}</p>
+              {[
+                { id: 'where', icon: MapPin, label: 'Where', value: searchLocation || 'Search destinations' },
+                { id: 'moveIn', icon: CalendarDays, label: 'Move in', value: moveInDate || 'Add dates' },
+                { id: 'leaseLength', icon: CalendarDays, label: 'Lease Length', value: leaseLength || '11 months+' },
+                { id: 'bedrooms', icon: BedDouble, label: 'Bedrooms', value: bedroomsText }
+              ].map((sec, idx, arr) => (
+                <div key={sec.id} className="flex flex-1 items-center min-w-0">
+                  <button onClick={() => setActiveSearchSection(activeSearchSection === sec.id ? null : sec.id)} className={`flex-1 flex flex-col items-start px-4 py-1.5 rounded-full cursor-pointer min-w-0 transition-all duration-200 ${activeSearchSection === sec.id ? 'bg-white shadow-md border border-gray-200' : 'hover:bg-gray-100 border border-transparent'}`}>
+                    <span className="text-xs font-bold text-gray-800 leading-tight">{sec.label}</span>
+                    <span className="text-xs text-gray-500 leading-tight truncate w-full text-left">{sec.value}</span>
+                  </button>
+                  {idx < arr.length - 1 && <div className="h-8 w-px bg-gray-200 shrink-0"></div>}
                 </div>
-              </button>
-              <div className="w-px h-6 bg-[#E8EAED] shrink-0"></div>
+              ))}
 
-              {/* Move in Section */}
-              <button onClick={() => setActiveSearchSection(activeSearchSection === 'moveIn' ? null : 'moveIn')} className={`flex-1 flex items-center gap-2 px-2 py-1 rounded-full cursor-pointer min-w-0 transition-all duration-200 ${activeSearchSection === 'moveIn' ? 'bg-white shadow-md border border-[#E8EAED]' : 'hover:bg-gray-50 border border-transparent'}`}>
-                <CalendarDays size={14} className="text-[#1A73E8] shrink-0" strokeWidth={1.5} />
-                <div className="min-w-0 text-left">
-                  <p className="text-[10px] font-semibold text-[#1A1A1A] leading-none">Move in</p>
-                  <p className="text-[10px] text-[#9AA0A6] leading-none truncate mt-0.5">{moveInDate || "Add dates"}</p>
-                </div>
-              </button>
-              <div className="w-px h-6 bg-[#E8EAED] shrink-0"></div>
-
-              {/* Lease Length Section */}
-              <button onClick={() => setActiveSearchSection(activeSearchSection === 'leaseLength' ? null : 'leaseLength')} className={`flex-1 flex items-center gap-2 px-2 py-1 rounded-full cursor-pointer min-w-0 transition-all duration-200 ${activeSearchSection === 'leaseLength' ? 'bg-white shadow-md border border-[#E8EAED]' : 'hover:bg-gray-50 border border-transparent'}`}>
-                <CalendarDays size={14} className="text-[#1A73E8] shrink-0" strokeWidth={1.5} />
-                <div className="min-w-0 text-left">
-                  <p className="text-[10px] font-semibold text-[#1A1A1A] leading-none">Lease Length</p>
-                  <p className="text-[10px] text-[#9AA0A6] leading-none truncate mt-0.5">{leaseLength || "11 months+"}</p>
-                </div>
-              </button>
-              <div className="w-px h-6 bg-[#E8EAED] shrink-0"></div>
-
-              {/* Bedrooms Section */}
-              <button onClick={() => setActiveSearchSection(activeSearchSection === 'bedrooms' ? null : 'bedrooms')} className={`flex-1 flex items-center gap-2 px-2 py-1 rounded-full cursor-pointer min-w-0 transition-all duration-200 ${activeSearchSection === 'bedrooms' ? 'bg-white shadow-md border border-[#E8EAED]' : 'hover:bg-gray-50 border border-transparent'}`}>
-                <BedDouble size={14} className="text-[#1A73E8] shrink-0" strokeWidth={1.5} />
-                <div className="min-w-0 text-left">
-                  <p className="text-[10px] font-semibold text-[#1A1A1A] leading-none">Bedrooms</p>
-                  <p className="text-[10px] text-[#9AA0A6] leading-none truncate mt-0.5">{bedroomsText}</p>
-                </div>
-              </button>
-
-              {/* Search Action Button */}
-              <button onClick={() => setActiveSearchSection(null)} className="w-9 h-9 bg-[#1A73E8] rounded-full flex items-center justify-center hover:bg-blue-700 hover:scale-105 shrink-0 ml-auto transition-all" style={{ boxShadow: '0 4px 10px rgba(26,115,232,0.4)' }}>
-                <Search size={16} className="text-white" strokeWidth={2} />
+              <button onClick={() => setActiveSearchSection(null)} className="w-12 h-12 bg-[#1A73E8] rounded-full flex items-center justify-center hover:bg-blue-700 hover:scale-105 shrink-0 ml-2 transition-all shadow-md">
+                <Search size={18} className="text-white" strokeWidth={2.5} />
               </button>
             </div>
 
-            {/* Backdrop to close popovers */}
             {activeSearchSection && <div className="fixed inset-0 z-10" onClick={() => setActiveSearchSection(null)}></div>}
 
             {/* PREMIUM ANIMATED POPOVERS */}
             {activeSearchSection && (
-              <div className="absolute top-14 left-0 right-0 bg-white rounded-2xl border border-[#E8EAED] p-5 z-30" style={{ boxShadow: '0 12px 32px rgba(0,0,0,0.08)' }}>
+              <div className="absolute top-16 left-0 right-0 bg-white rounded-3xl border border-gray-100 p-6 z-40 shadow-2xl">
                 {/* Key forces remount on tab change to replay animation */}
                 <div key={activeSearchSection} className="animate-pop-in">
                   {activeSearchSection === 'where' && (
-                    <div className="w-full">
-                      <input autoFocus type="text" value={searchLocation} onChange={(e) => setSearchLocation(e.target.value)} placeholder="Search destinations" className="w-full h-12 px-4 border border-[#E8EAED] rounded-xl text-sm focus:ring-2 focus:ring-[#1A73E8] focus:border-transparent outline-none transition-all" />
-                      <div className="mt-3 space-y-1">
+                    <div>
+                      <input autoFocus type="text" value={searchLocation} onChange={(e) => setSearchLocation(e.target.value)} placeholder="Search destinations" className="w-full h-14 px-5 border border-gray-200 rounded-2xl text-sm focus:ring-2 focus:ring-[#1A73E8] focus:border-transparent outline-none transition-all shadow-sm" />
+                      <div className="mt-4 grid grid-cols-1 gap-2">
                         {['Mumbai', 'Bandra West', 'Andheri East'].filter(l => l.toLowerCase().includes(searchLocation.toLowerCase())).map(loc => (
-                          <button key={loc} onClick={() => { setSearchLocation(loc); setActiveSearchSection(null) }} className="w-full text-left px-4 py-3 hover:bg-[#F5F5F7] rounded-xl text-sm flex items-center gap-3 text-[#3C4043] transition-colors">
-                            <div className="w-8 h-8 rounded-lg bg-[#F5F5F7] flex items-center justify-center"><MapPin size={14} className="text-[#5F6368]" strokeWidth={1.5} /></div>
-                            {loc}
+                          <button key={loc} onClick={() => { setSearchLocation(loc); setActiveSearchSection(null) }} className="w-full text-left px-4 py-3 hover:bg-gray-50 rounded-2xl text-sm flex items-center gap-4 text-gray-800 transition-colors group">
+                            <div className="w-12 h-12 rounded-xl border border-gray-200 flex items-center justify-center group-hover:border-gray-300 transition-colors">
+                              <MapPin size={18} className="text-gray-500" strokeWidth={1.5} />
+                            </div>
+                            <div>
+                              <div className="font-medium">{loc}</div>
+                              <div className="text-xs text-gray-500">India</div>
+                            </div>
                           </button>
                         ))}
                       </div>
                     </div>
                   )}
                   {activeSearchSection === 'moveIn' && (
-                    <div className="w-full flex flex-col items-start">
-                      <input type="date" value={moveInDate} onChange={(e) => setMoveInDate(e.target.value)} className="w-full h-12 px-4 border border-[#E8EAED] rounded-xl text-sm focus:ring-2 focus:ring-[#1A73E8] focus:border-transparent outline-none transition-all" />
-                      <button onClick={() => setActiveSearchSection(null)} className="mt-4 bg-[#1A1A1A] text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-black transition-colors">Done</button>
+                    <div className="flex flex-col items-center">
+                      <input type="date" value={moveInDate} onChange={(e) => setMoveInDate(e.target.value)} className="w-full h-14 px-5 border border-gray-200 rounded-2xl text-sm focus:ring-2 focus:ring-[#1A73E8] focus:border-transparent outline-none transition-all shadow-sm" />
+                      <button onClick={() => setActiveSearchSection(null)} className="mt-6 bg-[#1A1A1A] text-white px-8 py-3 rounded-xl text-sm font-semibold hover:bg-black transition-colors">Done</button>
                     </div>
                   )}
                   {activeSearchSection === 'leaseLength' && (
-                    <div className="w-full flex gap-3">
-                      {['11 months', '22 months', '33 months'].map(len => (
-                        <button key={len} onClick={() => { setLeaseLength(len); setActiveSearchSection(null) }} className={`flex-1 px-4 py-3 rounded-xl border-2 text-sm font-medium transition-all ${leaseLength === len ? 'border-[#1A73E8] bg-[#E8F0FE] text-[#1A73E8]' : 'border-[#E8EAED] text-[#3C4043] hover:border-gray-400'}`}>{len}</button>
-                      ))}
+                    <div className="flex flex-col items-center">
+                      <div className="w-full flex flex-col gap-3">
+                        {['11 months', '22 months', '33 months'].map(len => (
+                          <button key={len} onClick={() => { setLeaseLength(len); setActiveSearchSection(null) }} className={`w-full px-6 py-4 rounded-2xl border-2 text-left text-sm font-medium transition-all flex items-center justify-between ${leaseLength === len ? 'border-[#1A73E8] bg-[#E8F0FE] text-[#1A73E8]' : 'border-gray-200 text-gray-800 hover:border-gray-400'}`}>
+                            {len}
+                            {leaseLength === len && <Check size={18} className="text-[#1A73E8]" />}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   )}
                   {activeSearchSection === 'bedrooms' && (
-                    <div className="w-full flex gap-3">
-                      {['Any', '1BHK', '2BHK', '3BHK+'].map(bhk => {
-                        const isActive = bhk === 'Any' ? !currentBhk : currentBhk === bhk
-                        return (
-                          <button key={bhk} onClick={() => handleSearchBedroom(bhk)} className={`flex-1 px-4 py-3 rounded-xl border-2 text-sm font-medium transition-all ${isActive ? 'border-[#1A73E8] bg-[#E8F0FE] text-[#1A73E8]' : 'border-[#E8EAED] text-[#3C4043] hover:border-gray-400'}`}>{bhk}</button>
-                        )
-                      })}
+                    <div className="flex flex-col items-center">
+                      <div className="w-full flex flex-col gap-3">
+                        {['Any', '1BHK', '2BHK', '3BHK+'].map(bhk => {
+                          const isActive = bhk === 'Any' ? !currentBhk : currentBhk === bhk
+                          return (
+                            <button key={bhk} onClick={() => handleSearchBedroom(bhk)} className={`w-full px-6 py-4 rounded-2xl border-2 text-left text-sm font-medium transition-all flex items-center justify-between ${isActive ? 'border-[#1A73E8] bg-[#E8F0FE] text-[#1A73E8]' : 'border-gray-200 text-gray-800 hover:border-gray-400'}`}>
+                              {bhk}
+                              {isActive && <Check size={18} className="text-[#1A73E8]" />}
+                            </button>
+                          )
+                        })}
+                      </div>
                     </div>
                   )}
                 </div>
