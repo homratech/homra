@@ -6,6 +6,7 @@ import { createPortal } from 'react-dom'
 import { supabase } from '@/lib/supabaseClient'
 import Sidebar from '@/components/Sidebar'
 import PropertyCard from '@/components/PropertyCard'
+import AuthModal from '@/components/AuthModal' // Added AuthModal import
 import { Search, Globe, Menu, MapPin, CalendarDays, BedDouble, Waves, Dog, Home as HomeIcon, Building2, Building, Sofa, Users, UsersRound, LayoutGrid, Map as MapIcon, ChevronRight, ChevronLeft, ChevronDown, Sparkles, Wifi, Truck, Wrench, Zap, ShieldCheck, Clock, Car, Check } from 'lucide-react'
 
 // Reusable Property Carousel Component
@@ -112,6 +113,7 @@ export default function HomePage() {
   const [properties, setProperties] = useState<any[]>([])
   const [activeTab, setActiveTab] = useState('Rentals')
   const [mounted, setMounted] = useState(false)
+  const [showAuthModal, setShowAuthModal] = useState(false) // Added Auth Modal State
   
   // MULTI-FILTER STATE
   const [activeFilters, setActiveFilters] = useState<string[]>([])
@@ -295,13 +297,13 @@ export default function HomePage() {
           </nav>
 
           <div className="justify-self-end flex items-center gap-3">
-            <Link href="/auth" className="text-xs font-medium text-[#1A1A1A] hover:underline cursor-pointer hidden md:inline">
+            <button onClick={() => setShowAuthModal(true)} className="text-xs font-medium text-[#1A1A1A] hover:underline cursor-pointer hidden md:inline">
               List your property
-            </Link>
+            </button>
             <button className="w-8 h-8 rounded-full hover:bg-[#F1F3F4] flex items-center justify-center transition-colors">
               <Globe size={16} className="text-[#3C4043]" strokeWidth={1.5} />
             </button>
-            <button className="h-8 px-1.5 pr-0.5 rounded-full bg-white border border-[#E8EAED] hover:shadow-md transition-shadow flex items-center gap-1.5">
+            <button onClick={() => setShowAuthModal(true)} className="h-8 px-1.5 pr-0.5 rounded-full bg-white border border-[#E8EAED] hover:shadow-md transition-shadow flex items-center gap-1.5">
               <Menu size={14} className="text-[#3C4043] ml-1" strokeWidth={1.5} />
               <div className="w-6 h-6 rounded-full bg-gray-300 overflow-hidden">
                 <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=50&auto=format&fit=crop" alt="Profile" />
@@ -469,6 +471,9 @@ export default function HomePage() {
           </div>
         </section>
       </div>
+
+      {/* AUTH MODAL OVERLAY */}
+      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
 
       {/* PORTAL DROPDOWN */}
       {mounted && showParkingDropdown && createPortal(
