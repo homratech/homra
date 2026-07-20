@@ -332,7 +332,7 @@ export default function HomePage() {
               >
                 {tab}
               </span>
-            ))}
+            )}
           </nav>
 
           {/* Right Actions (Slightly nudged up for optical alignment) */}
@@ -385,8 +385,8 @@ export default function HomePage() {
                 { id: 'bedrooms', icon: BedDouble, label: 'Bedrooms', value: bedroomsText }
               ].map((sec, idx, arr) => (
                 <div key={sec.id} className="flex flex-1 items-center min-w-0">
-                  {/* Changed active state to Homra Blue Tint */}
-                  <button onClick={() => handleSectionClick(sec.id)} className={`flex-1 flex items-center gap-3 px-4 py-2 rounded-full cursor-pointer min-w-0 transition-all duration-200 ${activeSearchSection === sec.id ? 'bg-[#E8F0FE] border border-blue-100 shadow-sm' : 'hover:bg-gray-100 border border-transparent'}`}>
+                  {/* Changed active state to visible Homra Blue Tint */}
+                  <button onClick={() => handleSectionClick(sec.id)} className={`flex-1 flex items-center gap-3 px-4 py-2 rounded-full cursor-pointer min-w-0 transition-all duration-200 ${activeSearchSection === sec.id ? 'bg-[#d2e3fc] border border-[#1A73E8]/30 shadow-sm' : 'hover:bg-gray-100 border border-transparent'}`}>
                     <sec.icon size={16} className="text-gray-800 shrink-0" strokeWidth={1.5} />
                     <div className="flex flex-col items-start min-w-0">
                       <span className="text-xs font-bold text-gray-800 leading-tight">{sec.label}</span>
@@ -404,9 +404,9 @@ export default function HomePage() {
 
             {activeSearchSection && <div className="fixed inset-0 z-10" onClick={() => setActiveSearchSection(null)}></div>}
 
-            {/* PREMIUM FLOATING POPOVER WITH HOMRA BLUE TINT BG */}
+            {/* PREMIUM FLOATING POPOVER WITH VISIBLE HOMRA BLUE TINT BG */}
             {activeSearchSection && (
-              <div className="absolute top-20 left-0 right-0 bg-[#E8F0FE] rounded-3xl border border-blue-100 p-6 z-40 shadow-2xl overflow-hidden">
+              <div className="absolute top-20 left-0 right-0 bg-[#d2e3fc] rounded-3xl border border-[#1A73E8]/20 p-6 z-40 shadow-2xl overflow-hidden">
                 {/* Key + dynamic class forces remount and glides in the correct direction */}
                 <div key={activeSearchSection} className={slideDir === 'left' ? 'animate-glide-left' : 'animate-glide-right'}>
                   {activeSearchSection === 'where' && (
