@@ -118,3 +118,15 @@ body {
 .animate-pop-in { 
   animation: popIn 0.2s ease-out forwards; 
 }
+
+/* Glide Animations for Search Popovers */
+@keyframes glideLeft {
+  0% { opacity: 0; transform: translateX(15px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+@keyframes glideRight {
+  0% { opacity: 0; transform: translateX(-15px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+.animate-glide-left { animation: glideLeft 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+.animate-glide-right { animation: glideRight 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards; }

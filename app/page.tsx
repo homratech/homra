@@ -120,6 +120,8 @@ export default function HomePage() {
   const [searchLocation, setSearchLocation] = useState('')
   const [moveInDate, setMoveInDate] = useState('')
   const [leaseLength, setLeaseLength] = useState('')
+  const [slideDir, setSlideDir] = useState<'left' | 'right'>('right')
+  const sectionIds = ['where', 'moveIn', 'leaseLength', 'bedrooms']
   
   // MULTI-FILTER STATE
   const [activeFilters, setActiveFilters] = useState<string[]>([])
@@ -230,6 +232,20 @@ export default function HomePage() {
       setActiveFilters([...withoutBhk, bhk])
     }
     setActiveSearchSection(null)
+  }
+
+  // Handle Search Section Click with Glide Direction Logic
+  const handleSectionClick = (id: string) => {
+    if (id === activeSearchSection) {
+      setActiveSearchSection(null)
+      return
+    }
+    if (activeSearchSection) {
+      const prevIdx = sectionIds.indexOf(activeSearchSection)
+      const nextIdx = sectionIds.indexOf(id)
+      setSlideDir(nextIdx > prevIdx ? 'left' : 'right')
+    }
+    setActiveSearchSection(id)
   }
 
   // Slider dynamic background math
@@ -360,7 +376,7 @@ export default function HomePage() {
 
           {/* PREMIUM FLOATING SEARCH BAR */}
           <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-3xl z-30">
-            <div className="bg-white flex items-center pl-4 pr-1.5 h-14 rounded-full border border-gray-200 shadow-lg transition-all hover:shadow-xl">
+            <div className="bg-white flex items-center pl-4 pr-1.5 h-16 rounded-full border border-gray-200 shadow-lg transition-all hover:shadow-xl">
               
               {[
                 { id: 'where', icon: MapPin, label: 'Where', value: searchLocation || 'Search destinations' },
@@ -369,11 +385,14 @@ export default function HomePage() {
                 { id: 'bedrooms', icon: BedDouble, label: 'Bedrooms', value: bedroomsText }
               ].map((sec, idx, arr) => (
                 <div key={sec.id} className="flex flex-1 items-center min-w-0">
-                  <button onClick={() => setActiveSearchSection(activeSearchSection === sec.id ? null : sec.id)} className={`flex-1 flex flex-col items-start px-4 py-1.5 rounded-full cursor-pointer min-w-0 transition-all duration-200 ${activeSearchSection === sec.id ? 'bg-white shadow-md border border-gray-200' : 'hover:bg-gray-100 border border-transparent'}`}>
-                    <span className="text-xs font-bold text-gray-800 leading-tight">{sec.label}</span>
-                    <span className="text-xs text-gray-500 leading-tight truncate w-full text-left">{sec.value}</span>
+                  <button onClick={() => handleSectionClick(sec.id)} className={`flex-1 flex items-center gap-3 px-4 py-2 rounded-full cursor-pointer min-w-0 transition-all duration-200 ${activeSearchSection === sec.id ? 'bg-white shadow-md border border-gray-200' : 'hover:bg-gray-100 border border-transparent'}`}>
+                    <sec.icon size={16} className="text-gray-800 shrink-0" strokeWidth={1.5} />
+                    <div className="flex flex-col items-start min-w-0">
+                      <span className="text-xs font-bold text-gray-800 leading-tight">{sec.label}</span>
+                      <span className="text-xs text-gray-500 leading-tight truncate w-full text-left">{sec.value}</span>
+                    </div>
                   </button>
-                  {idx < arr.length - 1 && <div className="h-8 w-px bg-gray-200 shrink-0"></div>}
+                  {idx < arr.length - 1 && <div className="h-8 w-px bg-gray-200 shrink-0 mx-1"></div>}
                 </div>
               ))}
 
@@ -384,11 +403,11 @@ export default function HomePage() {
 
             {activeSearchSection && <div className="fixed inset-0 z-10" onClick={() => setActiveSearchSection(null)}></div>}
 
-            {/* PREMIUM ANIMATED POPOVERS */}
+            {/* PREMIUM FLOATING POPOVER WITH GAP AND GLIDE */}
             {activeSearchSection && (
-              <div className="absolute top-16 left-0 right-0 bg-white rounded-3xl border border-gray-100 p-6 z-40 shadow-2xl">
-                {/* Key forces remount on tab change to replay animation */}
-                <div key={activeSearchSection} className="animate-pop-in">
+              <div className="absolute top-20 left-0 right-0 bg-white rounded-3xl border border-gray-100 p-6 z-40 shadow-2xl overflow-hidden">
+                {/* Key + dynamic class forces remount and glides in the correct direction */}
+                <div key={activeSearchSection} className={slideDir === 'left' ? 'animate-glide-left' : 'animate-glide-right'}>
                   {activeSearchSection === 'where' && (
                     <div>
                       <input autoFocus type="text" value={searchLocation} onChange={(e) => setSearchLocation(e.target.value)} placeholder="Search destinations" className="w-full h-14 px-5 border border-gray-200 rounded-2xl text-sm focus:ring-2 focus:ring-[#1A73E8] focus:border-transparent outline-none transition-all shadow-sm" />
