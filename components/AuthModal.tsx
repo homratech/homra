@@ -106,7 +106,7 @@ export default function AuthModal({ isOpen, onClose }: { isOpen: boolean, onClos
       <div className="relative bg-white w-full max-w-md rounded-3xl shadow-2xl flex flex-col max-h-[95vh] overflow-y-auto no-scrollbar" onClick={(e) => e.stopPropagation()}>
         
         {/* Minimal Header */}
-        <div className="flex items-center justify-between p-5 border-b border-gray-100">
+        <div className="flex items-center justify-between p-5 border-b border-gray-100 sticky top-0 bg-white rounded-t-3xl z-10">
           {authMode !== 'email' ? (
             <button onClick={() => setAuthMode('email')} className="p-1.5 hover:bg-gray-100 rounded-full transition-colors">
               <ArrowLeft size={16} className="text-gray-800" />
@@ -134,25 +134,27 @@ export default function AuthModal({ isOpen, onClose }: { isOpen: boolean, onClos
         </div>
 
         <div className="p-8">
-          {/* Dynamic Header */}
-          <div className="mb-8">
+          {/* Logo & Dynamic Header */}
+          <div className="flex flex-col items-center mb-8">
+            <Image src="/homra-logo.jpg" width={60} height={18} alt="Homra Logo" className="rounded-md mb-4" />
+            
             {authMode === 'email' && (
-              <h1 className="text-2xl font-bold text-gray-900">
+              <h1 className="text-2xl font-bold text-gray-900 text-center">
                 {isLogin ? 'Welcome to Homra' : 'Create your account'}
               </h1>
             )}
             {authMode === 'phone-send' && (
-              <h1 className="text-2xl font-bold text-gray-900">Continue with Phone</h1>
+              <h1 className="text-2xl font-bold text-gray-900 text-center">Continue with Phone</h1>
             )}
             {authMode === 'phone-verify' && (
-              <h1 className="text-2xl font-bold text-gray-900">Enter Code</h1>
+              <h1 className="text-2xl font-bold text-gray-900 text-center">Enter Code</h1>
             )}
           </div>
 
           {/* Role Selector (Only for Email Signup) */}
           {!isLogin && authMode === 'email' && (
             <div className="mb-6">
-              <p className="text-xs font-medium text-gray-500 mb-3">I am a:</p>
+              <p className="text-xs font-medium text-gray-500 mb-3 text-center">I am a:</p>
               <div className="grid grid-cols-2 gap-3">
                 <button type="button" onClick={() => setRole('tenant')} className={`p-4 rounded-xl border-2 transition-all duration-200 flex flex-col items-center gap-2 ${role === 'tenant' ? 'border-gray-900 bg-gray-50' : 'border-gray-200 hover:border-gray-300'}`}>
                   <User size={20} className={role === 'tenant' ? 'text-gray-900' : 'text-gray-500'} strokeWidth={1.5} />
@@ -201,7 +203,7 @@ export default function AuthModal({ isOpen, onClose }: { isOpen: boolean, onClos
           {/* Phone OTP Forms */}
           {authMode === 'phone-send' && (
             <form onSubmit={handleSendOtp} className="space-y-4 mt-4">
-              <p className="text-sm text-gray-500 mb-6">Enter your phone number. We'll send you a verification code.</p>
+              <p className="text-sm text-gray-500 mb-6 text-center">Enter your phone number. We'll send you a verification code.</p>
               <input type="tel" placeholder="+91 98765 43210" value={phone} onChange={(e) => setPhone(e.target.value)} required className="w-full h-14 px-4 text-sm rounded-xl border border-gray-300 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 outline-none transition-all" />
               {error && <p className="text-xs text-red-500 bg-red-50 p-2 rounded-lg">{error}</p>}
               <button type="submit" disabled={loading} className="w-full h-14 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-black transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
@@ -212,7 +214,7 @@ export default function AuthModal({ isOpen, onClose }: { isOpen: boolean, onClos
 
           {authMode === 'phone-verify' && (
             <form onSubmit={handleVerifyOtp} className="space-y-4 mt-4">
-              <p className="text-sm text-gray-500 mb-6">We sent a code to <span className="font-semibold text-gray-900">{phone}</span>.</p>
+              <p className="text-sm text-gray-500 mb-6 text-center">We sent a code to <span className="font-semibold text-gray-900">{phone}</span>.</p>
               <input type="text" placeholder="6-digit code" value={otp} onChange={(e) => setOtp(e.target.value)} required maxLength={6} className="w-full h-14 px-4 text-sm tracking-widest rounded-xl border border-gray-300 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 outline-none transition-all text-center" />
               {error && <p className="text-xs text-red-500 bg-red-50 p-2 rounded-lg">{error}</p>}
               <button type="submit" disabled={loading} className="w-full h-14 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-black transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
