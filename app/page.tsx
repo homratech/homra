@@ -385,7 +385,8 @@ export default function HomePage() {
                 { id: 'bedrooms', icon: BedDouble, label: 'Bedrooms', value: bedroomsText }
               ].map((sec, idx, arr) => (
                 <div key={sec.id} className="flex flex-1 items-center min-w-0">
-                  <button onClick={() => handleSectionClick(sec.id)} className={`flex-1 flex items-center gap-3 px-4 py-2 rounded-full cursor-pointer min-w-0 transition-all duration-200 ${activeSearchSection === sec.id ? 'bg-white shadow-md border border-gray-200' : 'hover:bg-gray-100 border border-transparent'}`}>
+                  {/* Changed active state to Homra Blue Tint */}
+                  <button onClick={() => handleSectionClick(sec.id)} className={`flex-1 flex items-center gap-3 px-4 py-2 rounded-full cursor-pointer min-w-0 transition-all duration-200 ${activeSearchSection === sec.id ? 'bg-[#E8F0FE] border border-blue-100 shadow-sm' : 'hover:bg-gray-100 border border-transparent'}`}>
                     <sec.icon size={16} className="text-gray-800 shrink-0" strokeWidth={1.5} />
                     <div className="flex flex-col items-start min-w-0">
                       <span className="text-xs font-bold text-gray-800 leading-tight">{sec.label}</span>
