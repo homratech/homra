@@ -281,10 +281,12 @@ export default function HomePage() {
       <Sidebar />
       <div className="ml-[200px] px-6 py-4 animate-fade-in-up">
         {/* TOP NAVIGATION BAR */}
-        <header className="grid grid-cols-3 items-center h-12 mb-4">
-          <div></div>
+        <header className="flex items-center justify-between h-12 mb-4 whitespace-nowrap">
+          {/* Left Spacer */}
+          <div className="flex-1"></div>
           
-          <nav className="justify-self-center flex gap-6 text-xs font-medium">
+          {/* Center Navigation */}
+          <nav className="flex gap-6 text-xs font-medium whitespace-nowrap">
             {tabs.map((tab) => (
               <span 
                 key={tab} 
@@ -296,7 +298,8 @@ export default function HomePage() {
             ))}
           </nav>
 
-          <div className="justify-self-end flex items-center gap-3">
+          {/* Right Actions */}
+          <div className="flex-1 flex items-center justify-end gap-3 whitespace-nowrap">
             <button onClick={() => setShowAuthModal(true)} className="text-xs font-medium text-[#1A1A1A] hover:underline cursor-pointer hidden md:inline">
               List your property
             </button>
