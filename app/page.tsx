@@ -6,7 +6,7 @@ import { createPortal } from 'react-dom'
 import { supabase } from '@/lib/supabaseClient'
 import Sidebar from '@/components/Sidebar'
 import PropertyCard from '@/components/PropertyCard'
-import AuthModal from '@/components/AuthModal' // Added AuthModal import
+import AuthModal from '@/components/AuthModal'
 import { Search, Globe, Menu, MapPin, CalendarDays, BedDouble, Waves, Dog, Home as HomeIcon, Building2, Building, Sofa, Users, UsersRound, LayoutGrid, Map as MapIcon, ChevronRight, ChevronLeft, ChevronDown, Sparkles, Wifi, Truck, Wrench, Zap, ShieldCheck, Clock, Car, Check } from 'lucide-react'
 
 // Reusable Property Carousel Component
@@ -113,7 +113,7 @@ export default function HomePage() {
   const [properties, setProperties] = useState<any[]>([])
   const [activeTab, setActiveTab] = useState('Rentals')
   const [mounted, setMounted] = useState(false)
-  const [showAuthModal, setShowAuthModal] = useState(false) // Added Auth Modal State
+  const [showAuthModal, setShowAuthModal] = useState(false)
   
   // MULTI-FILTER STATE
   const [activeFilters, setActiveFilters] = useState<string[]>([])
@@ -280,30 +280,33 @@ export default function HomePage() {
     <>
       <Sidebar />
       <div className="ml-[200px] px-6 py-4 animate-fade-in-up">
-        {/* TOP NAVIGATION BAR - PERFECTLY ALIGNED FLEXBOX */}
-        <header className="flex items-center justify-between h-14 mb-4 flex-nowrap gap-4">
-          {/* Center Navigation */}
-          <nav className="flex-1 flex justify-center gap-6 text-xs font-medium whitespace-nowrap">
+        {/* TOP NAVIGATION BAR - 3 COLUMN FLEX FOR PERFECT CENTER & ALIGNMENT */}
+        <header className="flex items-center justify-between h-14 mb-4">
+          {/* Left Spacer (1/3 width) */}
+          <div className="flex-1 flex items-center"></div>
+          
+          {/* Center Navigation (1/3 width) */}
+          <nav className="flex-1 flex justify-center items-center gap-6 text-xs font-medium whitespace-nowrap">
             {tabs.map((tab) => (
               <span 
                 key={tab} 
                 onClick={() => setActiveTab(tab)}
-                className={`cursor-pointer transition-all duration-200 py-2 border-b-2 ${activeTab === tab ? 'text-[#1A73E8] border-[#1A73E8]' : 'text-[#5F6368] hover:text-[#1A1A1A] border-transparent'}`}
+                className={`cursor-pointer transition-all duration-200 pb-1 border-b-2 ${activeTab === tab ? 'text-[#1A73E8] border-[#1A73E8]' : 'text-[#5F6368] hover:text-[#1A1A1A] border-transparent'}`}
               >
                 {tab}
               </span>
             ))}
           </nav>
 
-          {/* Right Actions */}
-          <div className="flex items-center justify-end gap-3 whitespace-nowrap shrink-0">
-            <button onClick={() => setShowAuthModal(true)} className="text-xs font-medium text-[#1A1A1A] hover:underline cursor-pointer hidden md:inline-block">
+          {/* Right Actions (1/3 width) */}
+          <div className="flex-1 flex justify-end items-center gap-3 whitespace-nowrap">
+            <button onClick={() => setShowAuthModal(true)} className="text-xs font-medium text-[#1A1A1A] hover:underline cursor-pointer hidden md:inline">
               List your property
             </button>
-            <button className="w-8 h-8 rounded-full hover:bg-[#F1F3F4] flex items-center justify-center transition-colors shrink-0">
+            <button className="w-8 h-8 rounded-full hover:bg-[#F1F3F4] flex items-center justify-center transition-colors">
               <Globe size={16} className="text-[#3C4043]" strokeWidth={1.5} />
             </button>
-            <button onClick={() => setShowAuthModal(true)} className="h-8 px-1.5 pr-0.5 rounded-full bg-white border border-[#E8EAED] hover:shadow-md transition-shadow flex items-center gap-1.5 shrink-0">
+            <button onClick={() => setShowAuthModal(true)} className="h-8 px-1.5 pr-0.5 rounded-full bg-white border border-[#E8EAED] hover:shadow-md transition-shadow flex items-center gap-1.5">
               <Menu size={14} className="text-[#3C4043] ml-1" strokeWidth={1.5} />
               <div className="w-6 h-6 rounded-full bg-gray-300 overflow-hidden">
                 <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=50&auto=format&fit=crop" alt="Profile" />
