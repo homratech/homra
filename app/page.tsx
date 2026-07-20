@@ -115,6 +115,12 @@ export default function HomePage() {
   const [mounted, setMounted] = useState(false)
   const [showAuthModal, setShowAuthModal] = useState(false)
   
+  // INTERACTIVE SEARCH BAR STATE
+  const [activeSearchSection, setActiveSearchSection] = useState<string | null>(null)
+  const [searchLocation, setSearchLocation] = useState('')
+  const [moveInDate, setMoveInDate] = useState('')
+  const [leaseLength, setLeaseLength] = useState('')
+  
   // MULTI-FILTER STATE
   const [activeFilters, setActiveFilters] = useState<string[]>([])
   const [showParkingDropdown, setShowParkingDropdown] = useState(false)
@@ -209,6 +215,20 @@ export default function HomePage() {
     })
   }
 
+  // Search Bar Bedroom Filter Logic
+  const currentBhk = activeFilters.find(f => ['1BHK', '2BHK', '3BHK+'].includes(f))
+  const bedroomsText = currentBhk ? currentBhk : "1+ BHK"
+
+  const handleSearchBedroom = (bhk: string) => {
+    const withoutBhk = activeFilters.filter(f => !['1BHK', '2BHK', '3BHK+'].includes(f))
+    if (bhk === 'Any') {
+      setActiveFilters(withoutBhk)
+    } else {
+      setActiveFilters([...withoutBhk, bhk])
+    }
+    setActiveSearchSection(null)
+  }
+
   // Slider dynamic background math
   const minBudget = 10000
   const maxBudgetLimit = 100000
@@ -282,10 +302,8 @@ export default function HomePage() {
       <div className="ml-[200px] px-6 py-4 animate-fade-in-up">
         {/* TOP NAVIGATION BAR - PERFECTLY ALIGNED */}
         <header className="flex items-center justify-between h-14 mb-4">
-          {/* Left Spacer (1/3 width) */}
           <div className="flex-1 flex items-center"></div>
           
-          {/* Center Navigation (1/3 width) */}
           <nav className="flex-1 flex justify-center items-center gap-6 text-xs font-medium whitespace-nowrap">
             {tabs.map((tab) => (
               <span 
@@ -298,7 +316,6 @@ export default function HomePage() {
             ))}
           </nav>
 
-          {/* Right Actions (1/3 width) */}
           <div className="flex-1 flex justify-end items-center gap-3 whitespace-nowrap -mt-0.5">
             <button onClick={() => setShowAuthModal(true)} className="h-8 flex items-center text-xs font-medium text-[#1A1A1A] hover:underline cursor-pointer hidden md:inline">
               List your property
@@ -337,42 +354,98 @@ export default function HomePage() {
             </span>
           </div>
 
-          {/* FLOATING SEARCH BAR */}
-          <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-white flex items-center pl-4 pr-1 z-10 w-full max-w-3xl h-12 rounded-full no-scrollbar" style={{ boxShadow: '0 6px 20px rgba(0,0,0,0.1)' }}>
-            <div className="flex-1 flex items-center gap-2 px-2 py-1 hover:bg-gray-50 rounded-full cursor-pointer min-w-0">
-              <MapPin size={14} className="text-[#1A73E8] shrink-0" strokeWidth={1.5} />
-              <div className="min-w-0">
-                <p className="text-[10px] font-semibold text-[#1A1A1A] leading-none">Where</p>
-                <p className="text-[10px] text-[#9AA0A6] leading-none truncate mt-0.5">Search destinations</p>
-              </div>
+          {/* FLOATING INTERACTIVE SEARCH BAR */}
+          <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 w-full max-w-3xl z-20">
+            <div className="bg-white flex items-center pl-4 pr-1 h-12 rounded-full border border-[#E8EAED]" style={{ boxShadow: '0 6px 20px rgba(0,0,0,0.1)' }}>
+              
+              {/* Where Section */}
+              <button onClick={() => setActiveSearchSection(activeSearchSection === 'where' ? null : 'where')} className={`flex-1 flex items-center gap-2 px-2 py-1 rounded-full cursor-pointer min-w-0 transition-all duration-200 ${activeSearchSection === 'where' ? 'bg-white shadow-md border border-[#E8EAED]' : 'hover:bg-gray-50 border border-transparent'}`}>
+                <MapPin size={14} className="text-[#1A73E8] shrink-0" strokeWidth={1.5} />
+                <div className="min-w-0 text-left">
+                  <p className="text-[10px] font-semibold text-[#1A1A1A] leading-none">Where</p>
+                  <p className="text-[10px] text-[#9AA0A6] leading-none truncate mt-0.5">{searchLocation || "Search destinations"}</p>
+                </div>
+              </button>
+              <div className="w-px h-6 bg-[#E8EAED] shrink-0"></div>
+
+              {/* Move in Section */}
+              <button onClick={() => setActiveSearchSection(activeSearchSection === 'moveIn' ? null : 'moveIn')} className={`flex-1 flex items-center gap-2 px-2 py-1 rounded-full cursor-pointer min-w-0 transition-all duration-200 ${activeSearchSection === 'moveIn' ? 'bg-white shadow-md border border-[#E8EAED]' : 'hover:bg-gray-50 border border-transparent'}`}>
+                <CalendarDays size={14} className="text-[#1A73E8] shrink-0" strokeWidth={1.5} />
+                <div className="min-w-0 text-left">
+                  <p className="text-[10px] font-semibold text-[#1A1A1A] leading-none">Move in</p>
+                  <p className="text-[10px] text-[#9AA0A6] leading-none truncate mt-0.5">{moveInDate || "Add dates"}</p>
+                </div>
+              </button>
+              <div className="w-px h-6 bg-[#E8EAED] shrink-0"></div>
+
+              {/* Lease Length Section */}
+              <button onClick={() => setActiveSearchSection(activeSearchSection === 'leaseLength' ? null : 'leaseLength')} className={`flex-1 flex items-center gap-2 px-2 py-1 rounded-full cursor-pointer min-w-0 transition-all duration-200 ${activeSearchSection === 'leaseLength' ? 'bg-white shadow-md border border-[#E8EAED]' : 'hover:bg-gray-50 border border-transparent'}`}>
+                <CalendarDays size={14} className="text-[#1A73E8] shrink-0" strokeWidth={1.5} />
+                <div className="min-w-0 text-left">
+                  <p className="text-[10px] font-semibold text-[#1A1A1A] leading-none">Lease Length</p>
+                  <p className="text-[10px] text-[#9AA0A6] leading-none truncate mt-0.5">{leaseLength || "11 months+"}</p>
+                </div>
+              </button>
+              <div className="w-px h-6 bg-[#E8EAED] shrink-0"></div>
+
+              {/* Bedrooms Section */}
+              <button onClick={() => setActiveSearchSection(activeSearchSection === 'bedrooms' ? null : 'bedrooms')} className={`flex-1 flex items-center gap-2 px-2 py-1 rounded-full cursor-pointer min-w-0 transition-all duration-200 ${activeSearchSection === 'bedrooms' ? 'bg-white shadow-md border border-[#E8EAED]' : 'hover:bg-gray-50 border border-transparent'}`}>
+                <BedDouble size={14} className="text-[#1A73E8] shrink-0" strokeWidth={1.5} />
+                <div className="min-w-0 text-left">
+                  <p className="text-[10px] font-semibold text-[#1A1A1A] leading-none">Bedrooms</p>
+                  <p className="text-[10px] text-[#9AA0A6] leading-none truncate mt-0.5">{bedroomsText}</p>
+                </div>
+              </button>
+
+              {/* Search Action Button */}
+              <button onClick={() => setActiveSearchSection(null)} className="w-9 h-9 bg-[#1A73E8] rounded-full flex items-center justify-center hover:bg-blue-700 hover:scale-105 shrink-0 ml-auto transition-all" style={{ boxShadow: '0 4px 10px rgba(26,115,232,0.4)' }}>
+                <Search size={16} className="text-white" strokeWidth={2} />
+              </button>
             </div>
-            <div className="w-px h-6 bg-[#E8EAED] shrink-0"></div>
-            <div className="flex-1 flex items-center gap-2 px-2 py-1 hover:bg-gray-50 rounded-full cursor-pointer min-w-0">
-              <CalendarDays size={14} className="text-[#1A73E8] shrink-0" strokeWidth={1.5} />
-              <div className="min-w-0">
-                <p className="text-[10px] font-semibold text-[#1A1A1A] leading-none">Move in</p>
-                <p className="text-[10px] text-[#9AA0A6] leading-none truncate mt-0.5">Add dates</p>
+
+            {/* Backdrop to close popovers */}
+            {activeSearchSection && <div className="fixed inset-0 z-10" onClick={() => setActiveSearchSection(null)}></div>}
+
+            {/* Animated Popovers */}
+            {activeSearchSection && (
+              <div className="absolute top-14 left-0 right-0 bg-white rounded-2xl shadow-xl border border-[#E8EAED] p-4 z-30 animate-pop-in">
+                {activeSearchSection === 'where' && (
+                  <div className="w-full">
+                    <input autoFocus type="text" value={searchLocation} onChange={(e) => setSearchLocation(e.target.value)} placeholder="Search destinations" className="w-full h-10 px-3 border border-gray-200 rounded-lg text-xs focus:ring-1 focus:ring-[#1A73E8] outline-none" />
+                    <div className="mt-2 space-y-1">
+                      {['Mumbai', 'Bandra West', 'Andheri East'].filter(l => l.toLowerCase().includes(searchLocation.toLowerCase())).map(loc => (
+                        <button key={loc} onClick={() => { setSearchLocation(loc); setActiveSearchSection(null) }} className="w-full text-left px-2 py-2 hover:bg-gray-100 rounded-lg text-[11px] flex items-center gap-2 text-[#3C4043]">
+                          <MapPin size={14} className="text-[#5F6368]" /> {loc}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {activeSearchSection === 'moveIn' && (
+                  <div className="w-full flex flex-col items-start">
+                    <input type="date" value={moveInDate} onChange={(e) => setMoveInDate(e.target.value)} className="w-full h-10 px-3 border border-gray-200 rounded-lg text-xs focus:ring-1 focus:ring-[#1A73E8] outline-none" />
+                    <button onClick={() => setActiveSearchSection(null)} className="mt-3 bg-[#1A1A1A] text-white px-4 py-1.5 rounded-lg text-[11px] font-semibold">Done</button>
+                  </div>
+                )}
+                {activeSearchSection === 'leaseLength' && (
+                  <div className="w-full flex gap-2">
+                    {['11 months', '22 months', '33 months'].map(len => (
+                      <button key={len} onClick={() => { setLeaseLength(len); setActiveSearchSection(null) }} className={`px-4 py-2 rounded-lg border text-[11px] font-medium transition-all ${leaseLength === len ? 'border-[#1A1A1A] bg-gray-50' : 'border-gray-200 hover:border-gray-400'}`}>{len}</button>
+                    ))}
+                  </div>
+                )}
+                {activeSearchSection === 'bedrooms' && (
+                  <div className="w-full flex gap-2">
+                    {['Any', '1BHK', '2BHK', '3BHK+'].map(bhk => {
+                      const isActive = bhk === 'Any' ? !currentBhk : currentBhk === bhk
+                      return (
+                        <button key={bhk} onClick={() => handleSearchBedroom(bhk)} className={`px-4 py-2 rounded-lg border text-[11px] font-medium transition-all ${isActive ? 'border-[#1A1A1A] bg-gray-50' : 'border-gray-200 hover:border-gray-400'}`}>{bhk}</button>
+                      )
+                    })}
+                  </div>
+                )}
               </div>
-            </div>
-            <div className="w-px h-6 bg-[#E8EAED] shrink-0"></div>
-            <div className="flex-1 flex items-center gap-2 px-2 py-1 hover:bg-gray-50 rounded-full cursor-pointer min-w-0">
-              <CalendarDays size={14} className="text-[#1A73E8] shrink-0" strokeWidth={1.5} />
-              <div className="min-w-0">
-                <p className="text-[10px] font-semibold text-[#1A1A1A] leading-none">Lease Length</p>
-                <p className="text-[10px] text-[#9AA0A6] leading-none truncate mt-0.5">11 months+</p>
-              </div>
-            </div>
-            <div className="w-px h-6 bg-[#E8EAED] shrink-0"></div>
-            <div className="flex-1 flex items-center gap-2 px-2 py-1 hover:bg-gray-50 rounded-full cursor-pointer min-w-0">
-              <BedDouble size={14} className="text-[#1A73E8] shrink-0" strokeWidth={1.5} />
-              <div className="min-w-0">
-                <p className="text-[10px] font-semibold text-[#1A1A1A] leading-none">Bedrooms</p>
-                <p className="text-[10px] text-[#9AA0A6] leading-none truncate mt-0.5">1+ BHK</p>
-              </div>
-            </div>
-            <button className="w-9 h-9 bg-[#1A73E8] rounded-full flex items-center justify-center hover:bg-blue-700 hover:scale-105 shrink-0 ml-auto transition-all" style={{ boxShadow: '0 4px 10px rgba(26,115,232,0.4)' }}>
-              <Search size={16} className="text-white" strokeWidth={2} />
-            </button>
+            )}
           </div>
         </section>
 

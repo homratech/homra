@@ -108,3 +108,13 @@ body {
   cursor: pointer;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
+
+/* Pop-in Animation for Search Bar */
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.95) translateY(-5px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.animate-pop-in { 
+  animation: popIn 0.2s ease-out forwards; 
+}
