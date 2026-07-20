@@ -6,7 +6,7 @@ import { createPortal } from 'react-dom'
 import { supabase } from '@/lib/supabaseClient'
 import Sidebar from '@/components/Sidebar'
 import PropertyCard from '@/components/PropertyCard'
-import AuthModal from '@/components/AuthModal' // Added AuthModal import
+import AuthModal from '@/components/AuthModal'
 import { Search, Globe, Menu, MapPin, CalendarDays, BedDouble, Waves, Dog, Home as HomeIcon, Building2, Building, Sofa, Users, UsersRound, LayoutGrid, Map as MapIcon, ChevronRight, ChevronLeft, ChevronDown, Sparkles, Wifi, Truck, Wrench, Zap, ShieldCheck, Clock, Car, Check } from 'lucide-react'
 
 // Reusable Property Carousel Component
@@ -39,7 +39,6 @@ function PropertyCarousel({ title, properties, maxBudget, activeFilters }: { tit
     handleScroll()
   }, [properties])
 
-  // Build URL query string to pass filters to the next page
   const filtersQuery = activeFilters.length > 0 ? `&filters=${activeFilters.join(',')}` : ''
   const browseUrl = `/properties?maxBudget=${maxBudget}${filtersQuery}`
 
@@ -113,27 +112,23 @@ export default function HomePage() {
   const [properties, setProperties] = useState<any[]>([])
   const [activeTab, setActiveTab] = useState('Rentals')
   const [mounted, setMounted] = useState(false)
-  const [showAuthModal, setShowAuthModal] = useState(false) // Added Auth Modal State
+  const [showAuthModal, setShowAuthModal] = useState(false)
   
-  // MULTI-FILTER STATE
   const [activeFilters, setActiveFilters] = useState<string[]>([])
   const [showParkingDropdown, setShowParkingDropdown] = useState(false)
   const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0 })
   const [maxBudget, setMaxBudget] = useState(100000)
 
-  // Refs for Drag & Dropdown
   const filterRef = useRef<HTMLDivElement>(null)
   const parkingBtnRef = useRef<HTMLButtonElement>(null)
   const [isDragging, setIsDragging] = useState(false)
   const [startX, setStartX] = useState(0)
   const [scrollLeft, setScrollLeft] = useState(0)
 
-  // Ensure portal mounts only on client
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  // Global Window Scroll Listener to close dropdown
   useEffect(() => {
     const handleWindowScroll = () => {
       if (showParkingDropdown) {
@@ -144,7 +139,6 @@ export default function HomePage() {
     return () => window.removeEventListener('scroll', handleWindowScroll, true)
   }, [showParkingDropdown])
 
-  // Mouse Wheel Horizontal Scroll for Filters
   useEffect(() => {
     const el = filterRef.current
     if (!el) return
@@ -180,25 +174,21 @@ export default function HomePage() {
     setIsDragging(false)
   }
 
-  // Handle opening dropdown and calculating fixed position (Smart Flipping)
   const handleParkingClick = () => {
     if (!showParkingDropdown && parkingBtnRef.current) {
       const rect = parkingBtnRef.current.getBoundingClientRect()
-      const dropdownHeight = 160 // Approx height of the dropdown
+      const dropdownHeight = 160 
       const spaceBelow = window.innerHeight - rect.bottom
       
-      // If not enough space below, open upwards
       if (spaceBelow < dropdownHeight) {
         setDropdownPos({ top: rect.top - dropdownHeight - 4, left: rect.left })
       } else {
-        // Otherwise open downwards as normal
         setDropdownPos({ top: rect.bottom + 4, left: rect.left })
       }
     }
     setShowParkingDropdown(!showParkingDropdown)
   }
 
-  // Toggle Multi-Filter
   const toggleFilter = (filter: string) => {
     setActiveFilters(prev => {
       if (prev.includes(filter)) {
@@ -209,7 +199,6 @@ export default function HomePage() {
     })
   }
 
-  // Slider dynamic background math
   const minBudget = 10000
   const maxBudgetLimit = 100000
   const budgetPercentage = ((maxBudget - minBudget) / (maxBudgetLimit - minBudget)) * 100
@@ -280,18 +269,15 @@ export default function HomePage() {
     <>
       <Sidebar />
       <div className="ml-[200px] px-6 py-4 animate-fade-in-up">
-        {/* TOP NAVIGATION BAR */}
-        <header className="flex items-center justify-between h-12 mb-4 whitespace-nowrap">
-          {/* Left Spacer */}
-          <div className="flex-1"></div>
-          
+        {/* TOP NAVIGATION BAR - PERFECTLY ALIGNED FLEXBOX */}
+        <header className="flex items-center justify-between h-14 mb-4 flex-nowrap gap-4">
           {/* Center Navigation */}
-          <nav className="flex gap-6 text-xs font-medium whitespace-nowrap">
+          <nav className="flex-1 flex justify-center gap-6 text-xs font-medium whitespace-nowrap">
             {tabs.map((tab) => (
               <span 
                 key={tab} 
                 onClick={() => setActiveTab(tab)}
-                className={`pb-1 cursor-pointer transition-all duration-200 ${activeTab === tab ? 'text-[#1A73E8] border-b-2 border-[#1A73E8]' : 'text-[#5F6368] hover:text-[#1A1A1A]'}`}
+                className={`cursor-pointer transition-all duration-200 py-2 border-b-2 ${activeTab === tab ? 'text-[#1A73E8] border-[#1A73E8]' : 'text-[#5F6368] hover:text-[#1A1A1A] border-transparent'}`}
               >
                 {tab}
               </span>
@@ -299,14 +285,14 @@ export default function HomePage() {
           </nav>
 
           {/* Right Actions */}
-          <div className="flex-1 flex items-center justify-end gap-3 whitespace-nowrap">
-            <button onClick={() => setShowAuthModal(true)} className="text-xs font-medium text-[#1A1A1A] hover:underline cursor-pointer hidden md:inline">
+          <div className="flex items-center justify-end gap-3 whitespace-nowrap shrink-0">
+            <button onClick={() => setShowAuthModal(true)} className="text-xs font-medium text-[#1A1A1A] hover:underline cursor-pointer hidden md:inline-block">
               List your property
             </button>
-            <button className="w-8 h-8 rounded-full hover:bg-[#F1F3F4] flex items-center justify-center transition-colors">
+            <button className="w-8 h-8 rounded-full hover:bg-[#F1F3F4] flex items-center justify-center transition-colors shrink-0">
               <Globe size={16} className="text-[#3C4043]" strokeWidth={1.5} />
             </button>
-            <button onClick={() => setShowAuthModal(true)} className="h-8 px-1.5 pr-0.5 rounded-full bg-white border border-[#E8EAED] hover:shadow-md transition-shadow flex items-center gap-1.5">
+            <button onClick={() => setShowAuthModal(true)} className="h-8 px-1.5 pr-0.5 rounded-full bg-white border border-[#E8EAED] hover:shadow-md transition-shadow flex items-center gap-1.5 shrink-0">
               <Menu size={14} className="text-[#3C4043] ml-1" strokeWidth={1.5} />
               <div className="w-6 h-6 rounded-full bg-gray-300 overflow-hidden">
                 <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=50&auto=format&fit=crop" alt="Profile" />
@@ -385,7 +371,6 @@ export default function HomePage() {
           onMouseLeave={handleMouseUpOrLeave}
           className={`flex gap-2 mb-4 overflow-x-auto pb-2 h-12 items-center no-scrollbar smooth-scroll cursor-grab ${isDragging ? 'active:cursor-grabbing' : ''}`}
         >
-          {/* ALL Button */}
           <button 
             onClick={() => { setActiveFilters([]); setShowParkingDropdown(false) }}
             className={`h-9 px-3 rounded-xl flex items-center gap-1.5 text-[11px] font-medium whitespace-nowrap transition-all duration-200 border ${activeFilters.length === 0 ? 'bg-[#E8F0FE] text-[#1A73E8] border-transparent scale-105' : 'bg-white text-[#3C4043] border-[#E8EAED] hover:shadow-md hover:border-gray-300'}`}
@@ -394,7 +379,6 @@ export default function HomePage() {
             All
           </button>
 
-          {/* Standard Filters */}
           {filters.map((cat) => {
             const isActive = activeFilters.includes(cat.name)
             return (
@@ -409,7 +393,6 @@ export default function HomePage() {
             )
           })}
 
-          {/* Parking Filter */}
           <div className="relative shrink-0">
             <button 
               ref={parkingBtnRef}
@@ -441,7 +424,6 @@ export default function HomePage() {
           <span className="text-xs font-bold text-[#1A73E8] whitespace-nowrap w-16 text-right">₹{maxBudget.toLocaleString('en-IN')}</span>
         </section>
 
-        {/* FILTERED PROPERTIES SECTION */}
         <PropertyCarousel 
           title={`Available homes in Mumbai (${filteredProperties.length})`} 
           properties={filteredProperties} 
