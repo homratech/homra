@@ -139,16 +139,19 @@ export default function HomePage() {
     setMounted(true)
   }, [])
 
-  // Global Window Scroll Listener to close dropdown
+  // Global Window Scroll Listener to close dropdown and search popovers
   useEffect(() => {
     const handleWindowScroll = () => {
       if (showParkingDropdown) {
         setShowParkingDropdown(false)
       }
+      if (activeSearchSection) {
+        setActiveSearchSection(null)
+      }
     }
     window.addEventListener('scroll', handleWindowScroll, true)
     return () => window.removeEventListener('scroll', handleWindowScroll, true)
-  }, [showParkingDropdown])
+  }, [showParkingDropdown, activeSearchSection])
 
   // Mouse Wheel Horizontal Scroll for Filters
   useEffect(() => {
@@ -408,42 +411,45 @@ export default function HomePage() {
 
             {/* Animated Popovers */}
             {activeSearchSection && (
-              <div className="absolute top-14 left-0 right-0 bg-white rounded-2xl shadow-xl border border-[#E8EAED] p-4 z-30 animate-pop-in">
-                {activeSearchSection === 'where' && (
-                  <div className="w-full">
-                    <input autoFocus type="text" value={searchLocation} onChange={(e) => setSearchLocation(e.target.value)} placeholder="Search destinations" className="w-full h-10 px-3 border border-gray-200 rounded-lg text-xs focus:ring-1 focus:ring-[#1A73E8] outline-none" />
-                    <div className="mt-2 space-y-1">
-                      {['Mumbai', 'Bandra West', 'Andheri East'].filter(l => l.toLowerCase().includes(searchLocation.toLowerCase())).map(loc => (
-                        <button key={loc} onClick={() => { setSearchLocation(loc); setActiveSearchSection(null) }} className="w-full text-left px-2 py-2 hover:bg-gray-100 rounded-lg text-[11px] flex items-center gap-2 text-[#3C4043]">
-                          <MapPin size={14} className="text-[#5F6368]" /> {loc}
-                        </button>
+              <div className="absolute top-14 left-0 right-0 bg-white rounded-2xl shadow-xl border border-[#E8EAED] p-4 z-30">
+                {/* Key forces remount on tab change to replay animation */}
+                <div key={activeSearchSection} className="animate-pop-in">
+                  {activeSearchSection === 'where' && (
+                    <div className="w-full">
+                      <input autoFocus type="text" value={searchLocation} onChange={(e) => setSearchLocation(e.target.value)} placeholder="Search destinations" className="w-full h-10 px-3 border border-gray-200 rounded-lg text-xs focus:ring-1 focus:ring-[#1A73E8] outline-none" />
+                      <div className="mt-2 space-y-1">
+                        {['Mumbai', 'Bandra West', 'Andheri East'].filter(l => l.toLowerCase().includes(searchLocation.toLowerCase())).map(loc => (
+                          <button key={loc} onClick={() => { setSearchLocation(loc); setActiveSearchSection(null) }} className="w-full text-left px-2 py-2 hover:bg-gray-100 rounded-lg text-[11px] flex items-center gap-2 text-[#3C4043]">
+                            <MapPin size={14} className="text-[#5F6368]" /> {loc}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {activeSearchSection === 'moveIn' && (
+                    <div className="w-full flex flex-col items-start">
+                      <input type="date" value={moveInDate} onChange={(e) => setMoveInDate(e.target.value)} className="w-full h-10 px-3 border border-gray-200 rounded-lg text-xs focus:ring-1 focus:ring-[#1A73E8] outline-none" />
+                      <button onClick={() => setActiveSearchSection(null)} className="mt-3 bg-[#1A1A1A] text-white px-4 py-1.5 rounded-lg text-[11px] font-semibold">Done</button>
+                    </div>
+                  )}
+                  {activeSearchSection === 'leaseLength' && (
+                    <div className="w-full flex gap-2">
+                      {['11 months', '22 months', '33 months'].map(len => (
+                        <button key={len} onClick={() => { setLeaseLength(len); setActiveSearchSection(null) }} className={`px-4 py-2 rounded-lg border text-[11px] font-medium transition-all ${leaseLength === len ? 'border-[#1A1A1A] bg-gray-50' : 'border-gray-200 hover:border-gray-400'}`}>{len}</button>
                       ))}
                     </div>
-                  </div>
-                )}
-                {activeSearchSection === 'moveIn' && (
-                  <div className="w-full flex flex-col items-start">
-                    <input type="date" value={moveInDate} onChange={(e) => setMoveInDate(e.target.value)} className="w-full h-10 px-3 border border-gray-200 rounded-lg text-xs focus:ring-1 focus:ring-[#1A73E8] outline-none" />
-                    <button onClick={() => setActiveSearchSection(null)} className="mt-3 bg-[#1A1A1A] text-white px-4 py-1.5 rounded-lg text-[11px] font-semibold">Done</button>
-                  </div>
-                )}
-                {activeSearchSection === 'leaseLength' && (
-                  <div className="w-full flex gap-2">
-                    {['11 months', '22 months', '33 months'].map(len => (
-                      <button key={len} onClick={() => { setLeaseLength(len); setActiveSearchSection(null) }} className={`px-4 py-2 rounded-lg border text-[11px] font-medium transition-all ${leaseLength === len ? 'border-[#1A1A1A] bg-gray-50' : 'border-gray-200 hover:border-gray-400'}`}>{len}</button>
-                    ))}
-                  </div>
-                )}
-                {activeSearchSection === 'bedrooms' && (
-                  <div className="w-full flex gap-2">
-                    {['Any', '1BHK', '2BHK', '3BHK+'].map(bhk => {
-                      const isActive = bhk === 'Any' ? !currentBhk : currentBhk === bhk
-                      return (
-                        <button key={bhk} onClick={() => handleSearchBedroom(bhk)} className={`px-4 py-2 rounded-lg border text-[11px] font-medium transition-all ${isActive ? 'border-[#1A1A1A] bg-gray-50' : 'border-gray-200 hover:border-gray-400'}`}>{bhk}</button>
-                      )
-                    })}
-                  </div>
-                )}
+                  )}
+                  {activeSearchSection === 'bedrooms' && (
+                    <div className="w-full flex gap-2">
+                      {['Any', '1BHK', '2BHK', '3BHK+'].map(bhk => {
+                        const isActive = bhk === 'Any' ? !currentBhk : currentBhk === bhk
+                        return (
+                          <button key={bhk} onClick={() => handleSearchBedroom(bhk)} className={`px-4 py-2 rounded-lg border text-[11px] font-medium transition-all ${isActive ? 'border-[#1A1A1A] bg-gray-50' : 'border-gray-200 hover:border-gray-400'}`}>{bhk}</button>
+                        )
+                      })}
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>
