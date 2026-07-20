@@ -403,9 +403,9 @@ export default function HomePage() {
 
             {activeSearchSection && <div className="fixed inset-0 z-10" onClick={() => setActiveSearchSection(null)}></div>}
 
-            {/* PREMIUM FLOATING POPOVER WITH GAP, GLIDE, AND HOMRA PALETTE BG */}
+            {/* PREMIUM FLOATING POPOVER WITH HOMRA BLUE TINT BG */}
             {activeSearchSection && (
-              <div className="absolute top-20 left-0 right-0 bg-[#F5F5F7] rounded-3xl border border-gray-100 p-6 z-40 shadow-2xl overflow-hidden">
+              <div className="absolute top-20 left-0 right-0 bg-[#E8F0FE] rounded-3xl border border-blue-100 p-6 z-40 shadow-2xl overflow-hidden">
                 {/* Key + dynamic class forces remount and glides in the correct direction */}
                 <div key={activeSearchSection} className={slideDir === 'left' ? 'animate-glide-left' : 'animate-glide-right'}>
                   {activeSearchSection === 'where' && (
@@ -413,7 +413,7 @@ export default function HomePage() {
                       <input autoFocus type="text" value={searchLocation} onChange={(e) => setSearchLocation(e.target.value)} placeholder="Search destinations" className="w-full h-14 px-5 border border-gray-200 bg-white rounded-2xl text-sm focus:ring-2 focus:ring-[#1A73E8] focus:border-transparent outline-none transition-all shadow-sm" />
                       <div className="mt-4 grid grid-cols-1 gap-2">
                         {['Mumbai', 'Bandra West', 'Andheri East'].filter(l => l.toLowerCase().includes(searchLocation.toLowerCase())).map(loc => (
-                          <button key={loc} onClick={() => { setSearchLocation(loc); setActiveSearchSection(null) }} className="w-full text-left px-4 py-3 hover:bg-gray-50 bg-white rounded-2xl text-sm flex items-center gap-4 text-gray-800 transition-colors group shadow-sm">
+                          <button key={loc} onClick={() => { setSearchLocation(loc); setActiveSearchSection(null) }} className="w-full text-left px-4 py-3 hover:bg-blue-50 bg-white rounded-2xl text-sm flex items-center gap-4 text-gray-800 transition-colors group shadow-sm">
                             <div className="w-12 h-12 rounded-xl border border-gray-200 bg-[#F5F5F7] flex items-center justify-center group-hover:border-gray-300 transition-colors">
                               <MapPin size={18} className="text-gray-500" strokeWidth={1.5} />
                             </div>
@@ -436,7 +436,7 @@ export default function HomePage() {
                     <div className="flex flex-col items-center">
                       <div className="w-full flex flex-col gap-3">
                         {['11 months', '22 months', '33 months'].map(len => (
-                          <button key={len} onClick={() => { setLeaseLength(len); setActiveSearchSection(null) }} className={`w-full px-6 py-4 rounded-2xl border-2 text-left text-sm font-medium transition-all flex items-center justify-between ${leaseLength === len ? 'border-[#1A73E8] bg-[#E8F0FE] text-[#1A73E8]' : 'border-gray-200 bg-white text-gray-800 hover:border-gray-400'}`}>
+                          <button key={len} onClick={() => { setLeaseLength(len); setActiveSearchSection(null) }} className={`w-full px-6 py-4 rounded-2xl border-2 text-left text-sm font-medium transition-all flex items-center justify-between ${leaseLength === len ? 'border-[#1A73E8] bg-white text-[#1A73E8]' : 'border-gray-200 bg-white text-gray-800 hover:border-gray-400'}`}>
                             {len}
                             {leaseLength === len && <Check size={18} className="text-[#1A73E8]" />}
                           </button>
@@ -450,7 +450,7 @@ export default function HomePage() {
                         {['Any', '1BHK', '2BHK', '3BHK+'].map(bhk => {
                           const isActive = bhk === 'Any' ? !currentBhk : currentBhk === bhk
                           return (
-                            <button key={bhk} onClick={() => handleSearchBedroom(bhk)} className={`w-full px-6 py-4 rounded-2xl border-2 text-left text-sm font-medium transition-all flex items-center justify-between ${isActive ? 'border-[#1A73E8] bg-[#E8F0FE] text-[#1A73E8]' : 'border-gray-200 bg-white text-gray-800 hover:border-gray-400'}`}>
+                            <button key={bhk} onClick={() => handleSearchBedroom(bhk)} className={`w-full px-6 py-4 rounded-2xl border-2 text-left text-sm font-medium transition-all flex items-center justify-between ${isActive ? 'border-[#1A73E8] bg-white text-[#1A73E8]' : 'border-gray-200 bg-white text-gray-800 hover:border-gray-400'}`}>
                               {bhk}
                               {isActive && <Check size={18} className="text-[#1A73E8]" />}
                             </button>
