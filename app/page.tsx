@@ -417,7 +417,7 @@ export default function HomePage() {
 
             {activeSearchSection && <div className="fixed inset-0 z-10" onClick={() => setActiveSearchSection(null)}></div>}
 
-            {/* PREMIUM FLOATING POPOVER */}
+            {/* PREMIUM PURE WHITE FLOATING POPOVER */}
             {activeSearchSection && (
               <div className="absolute top-20 left-0 right-0 bg-white rounded-3xl border border-gray-100 p-6 z-40 shadow-2xl overflow-hidden">
                 {/* Key + dynamic class forces remount and glides in the correct direction */}
@@ -438,8 +438,8 @@ export default function HomePage() {
                       <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 px-2">Popular Destinations</p>
                       <div className="grid grid-cols-1 gap-1">
                         {['Mumbai', 'Bandra West', 'Andheri East', 'Powai', 'Juhu'].filter(l => l.toLowerCase().includes(searchLocation.toLowerCase())).map(loc => (
-                          <button key={loc} onClick={() => { setSearchLocation(loc); setActiveSearchSection(null) }} className="w-full text-left px-4 py-3 hover:bg-[#F5F5F7] rounded-2xl text-sm flex items-center gap-4 text-gray-800 transition-colors group">
-                            <div className="w-10 h-10 rounded-xl bg-[#F5F5F7] flex items-center justify-center group-hover:bg-white transition-colors shrink-0">
+                          <button key={loc} onClick={() => { setSearchLocation(loc); setActiveSearchSection(null) }} className="w-full text-left px-4 py-3 hover:bg-gray-50 rounded-2xl text-sm flex items-center gap-4 text-gray-800 transition-colors group">
+                            <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center group-hover:bg-white transition-colors shrink-0">
                               <Navigation size={16} className="text-gray-500" strokeWidth={1.5} />
                             </div>
                             <div className="flex-1 min-w-0">
@@ -461,7 +461,7 @@ export default function HomePage() {
                       <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 px-1">Quick Select</p>
                       <div className="grid grid-cols-4 gap-2 mb-5">
                         {quickDates.map(qd => (
-                          <button key={qd.label} onClick={() => { setMoveInDate(qd.value); setActiveSearchSection(null) }} className={`h-14 rounded-2xl border-2 text-sm font-semibold transition-all ${moveInDate === qd.value ? 'border-[#1A73E8] bg-[#E8F0FE] text-[#1A73E8]' : 'border-gray-200 text-gray-700 hover:border-gray-400 hover:bg-gray-50'}`}>
+                          <button key={qd.label} onClick={() => { setMoveInDate(qd.value); setActiveSearchSection(null) }} className={`h-14 rounded-2xl border-2 text-sm font-semibold transition-all ${moveInDate === qd.value ? 'border-[#1A73E8] text-[#1A73E8]' : 'border-gray-200 text-gray-700 hover:border-gray-400 hover:bg-gray-50'}`}>
                             {qd.label}
                           </button>
                         ))}
@@ -484,16 +484,18 @@ export default function HomePage() {
                   {activeSearchSection === 'leaseLength' && (
                     <div>
                       <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 px-1">Select Lease Duration</p>
-                      <div className="w-full grid grid-cols-3 gap-3">
+                      <div className="w-full flex flex-col gap-3">
                         {[
-                          { len: '11 months', desc: 'Standard leave & license' },
-                          { len: '22 months', desc: 'Extended stay option' },
-                          { len: '33 months', desc: 'Long-term commitment' },
+                          { len: '< 6 months', desc: 'Short-term stay or transit housing' },
+                          { len: '11 months', desc: 'Standard leave & license agreement' },
+                          { len: '2+ years', desc: 'Long-term commitment with stability' },
                         ].map(opt => (
-                          <button key={opt.len} onClick={() => { setLeaseLength(opt.len); setActiveSearchSection(null) }} className={`h-32 rounded-2xl border-2 flex flex-col items-center justify-center gap-2 p-3 transition-all ${leaseLength === opt.len ? 'border-[#1A73E8] bg-[#E8F0FE]' : 'border-gray-200 hover:border-gray-400 hover:bg-gray-50'}`}>
-                            <span className={`font-extrabold text-2xl ${leaseLength === opt.len ? 'text-[#1A73E8]' : 'text-gray-900'}`}>{opt.len.split(' ')[0]}</span>
-                            <span className={`text-xs font-medium ${leaseLength === opt.len ? 'text-[#1A73E8]' : 'text-gray-500'}`}>months</span>
-                            <span className="text-[10px] text-gray-400 text-center leading-tight">{opt.desc}</span>
+                          <button key={opt.len} onClick={() => { setLeaseLength(opt.len); setActiveSearchSection(null) }} className={`w-full px-5 py-4 rounded-2xl border-2 flex items-center justify-between transition-all ${leaseLength === opt.len ? 'border-[#1A73E8] shadow-sm' : 'border-gray-200 hover:border-gray-400 hover:bg-gray-50'}`}>
+                            <div className="text-left">
+                              <span className={`block font-bold text-lg ${leaseLength === opt.len ? 'text-[#1A73E8]' : 'text-gray-900'}`}>{opt.len}</span>
+                              <span className="text-xs text-gray-500 mt-0.5 block">{opt.desc}</span>
+                            </div>
+                            {leaseLength === opt.len && <Check size={20} className="text-[#1A73E8] shrink-0" strokeWidth={2.5} />}
                           </button>
                         ))}
                       </div>
@@ -513,7 +515,7 @@ export default function HomePage() {
                         ].map(opt => {
                           const isActive = opt.bhk === 'Any' ? !currentBhk : currentBhk === opt.bhk
                           return (
-                            <button key={opt.bhk} onClick={() => handleSearchBedroom(opt.bhk)} className={`w-full px-4 py-4 rounded-2xl border-2 text-left transition-all flex items-center justify-between ${isActive ? 'border-[#1A73E8] bg-[#E8F0FE]' : 'border-transparent hover:bg-gray-50'}`}>
+                            <button key={opt.bhk} onClick={() => handleSearchBedroom(opt.bhk)} className={`w-full px-4 py-4 rounded-2xl border-2 text-left transition-all flex items-center justify-between ${isActive ? 'border-[#1A73E8] shadow-sm' : 'border-transparent hover:bg-gray-50'}`}>
                               <div>
                                 <div className={`text-sm font-bold ${isActive ? 'text-[#1A73E8]' : 'text-gray-900'}`}>{opt.bhk}</div>
                                 <div className="text-xs text-gray-500 mt-0.5">{opt.desc}</div>
