@@ -131,16 +131,21 @@ body {
 .animate-glide-left { animation: glideLeft 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 .animate-glide-right { animation: glideRight 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 
-/* Custom Premium Scrollbar for Dropdowns */
+/* Custom Premium Ultra-Thin Scrollbar for Dropdowns */
+.homra-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+}
 .homra-scroll::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
+  height: 4px;
 }
 .homra-scroll::-webkit-scrollbar-track {
   background: transparent;
 }
 .homra-scroll::-webkit-scrollbar-thumb {
   background: #d1d5db;
-  border-radius: 3px;
+  border-radius: 4px;
 }
 .homra-scroll::-webkit-scrollbar-thumb:hover {
   background: #9ca3af;
